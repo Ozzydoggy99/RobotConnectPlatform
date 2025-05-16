@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYTECH AUTOMATED - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111827;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 30px;
+            border-radius: 8px;
+            width: 350px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            color: white;
+            border: 1px solid #374151;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #10b981;
+            font-size: 2rem;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #9ca3af;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #d1d5db;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            background-color: #1f2937;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #059669;
+        }
+        .error-message {
+            color: #ef4444;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+            background-color: rgba(239, 68, 68, 0.1);
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>SKYTECH AUTOMATED</h1>
+        <h2>Robot Fleet Management</h2>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Login</button>
+            <div id="error-message" class="error-message"></div>
+        </form>
+        <div class="footer">
+            <p>Use credentials: Ozzydog / Ozzydog</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error-message');
+            
+            if (username === 'Ozzydog' && password === 'Ozzydog') {
+                // Store auth info
+                localStorage.setItem('auth', 'true');
+                localStorage.setItem('username', username);
+                localStorage.setItem('lastLogin', new Date().toISOString());
+                
+                // Redirect to dashboard
+                window.location.href = '/dashboard';
+            } else {
+                // Show error
+                errorElement.textContent = 'Invalid username or password';
+                errorElement.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

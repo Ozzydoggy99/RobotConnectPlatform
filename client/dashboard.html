@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYTECH AUTOMATED - Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111827;
+            margin: 0;
+            padding: 0;
+            color: #e5e7eb;
+        }
+        
+        header {
+            background-color: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid #374151;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .username {
+            color: #9ca3af;
+        }
+        
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background-color: transparent;
+            border: 1px solid #374151;
+            color: #e5e7eb;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        
+        .logout-btn:hover {
+            background-color: #1f2937;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .card {
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+            border: 1px solid #374151;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #374151;
+        }
+        
+        .card-title {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #f9fafb;
+        }
+        
+        .card-description {
+            margin-top: 0.5rem;
+            color: #9ca3af;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .spinner {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            border: 2px solid #1f2937;
+            border-top-color: #10b981;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            color: #9ca3af;
+            font-weight: 500;
+            border-bottom: 1px solid #374151;
+        }
+        
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #374151;
+        }
+        
+        tr:hover {
+            background-color: rgba(55, 65, 81, 0.3);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-outline {
+            background-color: transparent;
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+        
+        .badge-status-completed {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .badge-status-in_progress {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        .badge-status-queued {
+            background-color: #f59e0b;
+            color: white;
+        }
+        
+        .badge-status-failed {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .badge-status-default {
+            background-color: #6b7280;
+            color: white;
+        }
+        
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .button-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .button-outline {
+            background-color: transparent;
+            border: 1px solid #374151;
+            color: #e5e7eb;
+        }
+        
+        .button-outline:hover {
+            background-color: #374151;
+        }
+        
+        .button-danger {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+        }
+        
+        .button-danger:hover {
+            background-color: #dc2626;
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 0;
+            color: #9ca3af;
+        }
+        
+        .task-id {
+            font-family: monospace;
+            color: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SKYTECH AUTOMATED</div>
+        <div class="user-nav">
+            <span class="username" id="user-display">...</span>
+            <button class="logout-btn" id="logout-btn">Logout</button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Task Management</h2>
+                <div class="card-description">View and manage robot tasks</div>
+            </div>
+            <div class="card-content">
+                <div id="loading-container" class="loading">
+                    <div class="spinner"></div>
+                </div>
+                <div id="tasks-container" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task ID</th>
+                                <th>Created At</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Robot</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasks-table-body">
+                            <!-- Tasks will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // Authentication check
+        function checkAuth() {
+            const auth = localStorage.getItem('auth');
+            const username = localStorage.getItem('username');
+            
+            if (!auth) {
+                window.location.href = '/';
+                return false;
+            }
+            
+            // Display the username
+            document.getElementById('user-display').textContent = username || 'Admin';
+            return true;
+        }
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('auth');
+            localStorage.removeItem('username');
+            localStorage.removeItem('lastLogin');
+            window.location.href = '/';
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        
+        // Get status badge class
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'completed':
+                    return 'badge-status-completed';
+                case 'in_progress':
+                    return 'badge-status-in_progress';
+                case 'queued':
+                    return 'badge-status-queued';
+                case 'failed':
+                    return 'badge-status-failed';
+                default:
+                    return 'badge-status-default';
+            }
+        }
+        
+        // Fetch tasks
+        async function fetchTasks() {
+            try {
+                const response = await fetch('/api/tasks');
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tasks');
+                }
+                
+                const tasks = await response.json();
+                return tasks;
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+                return [];
+            }
+        }
+        
+        // Render tasks
+        function renderTasks(tasks) {
+            const tableBody = document.getElementById('tasks-table-body');
+            
+            if (!tasks || tasks.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            No tasks found. Create a new task to get started.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tableBody.innerHTML = tasks.map(task => `
+                <tr>
+                    <td class="task-id">${task.taskId || 'N/A'}</td>
+                    <td>${formatDate(task.createdAt)}</td>
+                    <td>
+                        <span class="badge badge-outline">${task.taskType || 'Unknown'}</span>
+                    </td>
+                    <td>
+                        <span class="badge ${getStatusBadgeClass(task.status)}">${task.status || 'Unknown'}</span>
+                    </td>
+                    <td>${task.robotId || 'Unassigned'}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button class="button button-sm button-outline" onclick="viewTask('${task.id}')">View</button>
+                            ${task.status === 'queued' ? `
+                                <button class="button button-sm button-danger" onclick="cancelTask('${task.id}')">Cancel</button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // View task details
+        function viewTask(taskId) {
+            alert(`View task details for task ${taskId}`);
+            // You would typically navigate to a task details page here
+        }
+        
+        // Cancel task
+        async function cancelTask(taskId) {
+            if (!confirm(`Are you sure you want to cancel task ${taskId}?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/tasks/${taskId}/cancel`, {
+                    method: 'POST',
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to cancel task');
+                }
+                
+                alert('Task canceled successfully');
+                loadTasks(); // Reload tasks
+            } catch (error) {
+                console.error('Error canceling task:', error);
+                alert('Failed to cancel task');
+            }
+        }
+        
+        // Load tasks
+        async function loadTasks() {
+            // Show loading spinner
+            document.getElementById('loading-container').style.display = 'flex';
+            document.getElementById('tasks-container').style.display = 'none';
+            
+            const tasks = await fetchTasks();
+            
+            // Hide loading spinner, show tasks table
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('tasks-container').style.display = 'block';
+            
+            renderTasks(tasks);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!checkAuth()) return;
+            
+            // Set up logout button
+            document.getElementById('logout-btn').addEventListener('click', logout);
+            
+            // Load tasks
+            loadTasks();
+            
+            // Set up refresh interval (every 30 seconds)
+            setInterval(loadTasks, 30000);
+        });
+    </script>
+</body>
+</html>

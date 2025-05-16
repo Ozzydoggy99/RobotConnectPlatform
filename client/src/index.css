@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* App theme colors */
+  --primary: #10b981;
+  --primary-dark: #059669;
+  --secondary: #065f46;
+  --background: #111827;
+  --card-bg: rgba(0, 0, 0, 0.2);
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --error: #ef4444;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+}
+
+.text-gradient-primary {
+  background: linear-gradient(to right, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Login page styles */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background);
+  padding: 1rem;
+}
+
+.login-brand {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.login-brand h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(to right, #10b981, #059669);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  padding-bottom: 0.5rem;
+}
