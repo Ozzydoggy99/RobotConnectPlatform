@@ -1,0 +1,1439 @@
+AutoXing Cloud Platform Service Interface (1.0.0)
+Authentication
+get interface access token
+Access tokens are credentials for users to access the API, and access tokens are required for all interface access.
+
+header Parameters
+Authorization
+required
+string
+AppCode is used for gateway authentication
+
+Request Body schema: application/json
+appId
+required
+string
+App ID
+
+timestamp
+required
+integer <int64>
+timestamp
+
+sign
+required
+string
+Signature, the rule is Md5 (appId+timestamp+appSecret)
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/auth/v1.1/token
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"key": "e2ac30ea7724442b",
+"token": "eyJh...ocDzA",
+"expireTime": 600
+}
+}
+Robot
+get bot list
+get a list of robots
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+keyWord	
+string
+keyword, currently only supports robot ID
+
+pageSize	
+integer
+Default: 0
+the number of pages per page, when it is 0, it means no pagination
+
+pageNum	
+integer
+Default: 0
+page number
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/robot/v1.1/list
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"count": 100,
+"list": []
+}
+}
+get the latest status of the robot
+Get the latest status of the robot
+
+path Parameters
+robotId
+required
+string
+Robot ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+
+get
+/robot/v1.1/{robotId}/state
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"robotId": "string",
+"areaId": "string",
+"x": 0.1,
+"y": 0.1,
+"yaw": 0,
+"speed": 0.1,
+"locQuality": 0,
+"battery": 0,
+"hasObstruction": true,
+"isCharging": true,
+"isEmergencyStop": true,
+"isGoHome": true,
+"isManualMode": true,
+"isRemoteMode": true,
+"errors": [],
+"timestamp": 0,
+"taskObj": {}
+}
+}
+V2.0 get the latest status of the robot
+V2.0 Get the latest status of the robot
+
+path Parameters
+robotId
+required
+string
+Robot ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+
+get
+/robot/v2.0/{robotId}/state
+Response samples
+200
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"robotId": "8981307a02163yT",
+"battery": 74,
+"businessId": "6461a0449a3fd283a5c0bbd7",
+"disinfect": {},
+"dispatch": 0,
+"distance": 0,
+"enableRcs": false,
+"errors": [],
+"areaId": "208e8fa6-d165-4ff3-9bd8-d8c874da147b",
+"hasObstruction": false,
+"hasPersonAhead": false,
+"isCharging": false,
+"isEmergencyStop": true,
+"isFrontBumperPressed": false,
+"isGoHome": false,
+"isManualMode": false,
+"isRearBumperPressed": false,
+"isRemoteMode": false,
+"isTesting": false,
+"locQuality": 100,
+"moveCreator": "",
+"moveState": "idle",
+"ori": 131,
+"pid": 721,
+"robotSignal": "none",
+"serialNum": 4005,
+"speed": 0,
+"vers": {},
+"x": -3.5275,
+"y": 1.3675,
+"yaw": 2.29,
+"taskObj": {},
+"timestamp": 1739260626377
+}
+}
+Map
+get site list
+get a list of sites
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+businessId
+required
+string
+Business Id (one must exist for businessId, robotId and areaId)
+
+robotId
+required
+string
+Robot Id (when businessId, robotId and areaId exist at the same time, the query rule businessId > robotId > areaId)
+
+areaId
+required
+string
+area ID (when businessId, robotId and areaId exist at the same time, the query rule businessId > robotId > areaId)
+
+type	
+integer
+POI type
+
+pageSize	
+integer
+the number of pagination
+
+pageNum	
+integer
+pagination page number
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/map/v1.1/poi/list
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"count": 0,
+"list": []
+}
+}
+new site
+new site
+
+path Parameters
+areaId
+required
+string
+area identifier
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+name	
+string
+site name
+
+coordinate
+required
+Array of numbers <float> [ items <float > ]
+site coordinates
+
+yaw	
+integer
+Site orientation angle Unit: degrees
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+put
+/map/v1.1/poi/{areaId}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+{
+"status": 200,
+"message": "ok",
+"data": "e75a410852b6ba2ce054f64737bf44d3"
+}
+delete site
+delete site
+
+path Parameters
+poiId
+required
+string
+site ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+delete
+/map/v1.1/poi/{poiId}
+Response samples
+200400
+Content type
+application/json
+
+Copy
+{
+"status": 200,
+"message": "ok"
+}
+Get detail of the POI
+Get detail of the POI
+
+path Parameters
+poiId
+required
+string
+POI ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+get
+/map/v1.1/poi/{poiId}
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"id": "611f103f4242e2e4351ed7b5",
+"buildingId": "60a4c374059acc6c8bdff074",
+"businessId": "60d998a1fccc72d6fd363627",
+"areaId": "60d9ae1efccc72d6fd3636de",
+"floor": 1,
+"name": "outside elevator 2",
+"type": 6,
+"coordinate": [],
+"properties": { },
+"yaw": 269
+}
+}
+get a list of regions
+get a list of regions
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+pageSize	
+integer
+Default: 0
+the number of paging entries, 0 means no paging
+
+pageNum	
+integer
+Default: 1
+pagination page number
+
+businessId
+required
+string
+business ID, businessId and robotId contain at least one item
+
+robotId
+required
+string
+Robot ID
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/map/v1.1/area/list
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"count": 0,
+"list": []
+}
+}
+get map image of the area
+get map image of the area
+
+path Parameters
+areaId
+required
+string
+the identification of the area
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+get
+/map/v1.1/area/{areaId}/base-map
+Response samples
+400
+Content type
+application/json
+
+Copy
+{ }
+Get the deployment information of the robot
+Get the deployment information of the robot
+
+path Parameters
+robotId
+required
+string
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+get
+/map/v1.1/robot/{robotId}/deploy
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"activationTime": 1669255110085,
+"businessId": "60d998a1fccc72d6fd363627",
+"customerId": "oHrGS5d5NAcK7xLdPiZl9h6SJwdY",
+"deployPlace": "60a4c374059acc6c8bdff074",
+"deployState": 1
+}
+}
+Task
+new tasks v3
+The V3 API supports creating regular tasks and queued tasks
+Ordinary tasks: Instant delivery tasks directly assigned to designated robots. After creating a ordinary task by calling this interface, the system will automatically invoke the task execution interface, eliminating the need for the caller to additionally call the execute interface.
+
+Queue tasks: Delivery tasks submitted to the system through the task creation interface, entering the task queue and waiting for the dispatch system to dynamically assign idle vehicles to perform (Note: Vehicles will not receive tasks when they are offline, manual, remotely controlled, emergency stopped or faulty)
+
+New Request Task Example Document
+https://autoxingtech.github.io/axdoc/en/TaskExample/0_task-example/
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+name
+required
+string
+task name
+
+robotId	
+string
+The ID of the robot performing the task, if creating a ordinary task, this field must be passed; if it is a queue task, this field can be empty but it must be guaranteed that there is a robot under the corresponding business
+
+businessId	
+string
+Business identifier, if creating a queue task, this field must be passed; if it is a ordinary task, this field can be empty
+
+dispatchType	
+integer
+Task type
+0 for ordinary task
+2 for queue task
+routeMode	
+integer
+Routing mode, default is 1
+1 for sequential routing
+2 for shortest distance routing
+runMode	
+integer
+Travel mode, default is 1
+1 for flexible obstacle avoidance,
+2 for trajectory-based travel with limited obstacle avoidance
+3 for trajectory-based travel without obstacle avoidance
+4 for trajectory-based travel without replenishing the rack docking points
+runNum	
+integer
+Number of executions (default is 1, 0 means infinite loop)
+
+taskType
+required
+integer
+Task type
+0 for disinfection
+1 for return to charging station
+2 for restaurant
+3 for hotel
+4 for delivery (five-in-one)
+5 for factory
+6 for chassis mini-program
+7 for charge scheduling
+runType
+required
+integer
+Run type
+0 for scheduled disinfection
+1 for temporary disinfection
+20 for quick meal delivery
+21 for multi-point meal delivery
+22 for direct delivery
+23 for roaming
+24 for return
+25 for charging station
+26 for summon
+27 for birthday mode
+28 for guiding
+29 for lifting
+30 for lifting cruise
+31 for flexible carry
+32 for roll
+33 for fully charged and unplugged
+sourceType	
+integer
+Task source
+0 for unknown source
+1 for head shell App
+2 for chassis mini program
+3 for pager
+4 for chassis
+5 for dispatch
+6 for secondary development
+7 for Pad App
+ignorePublicSite	
+boolean
+Whether to ignore public sites (default is not to ignore)
+
+speed	
+number <float>
+Robot travel speed in meters per second. Recommended speed is 0.4~1.0
+
+detourRadius	
+number <float>
+Obstacle avoidance radius, unit: meters, default is 1.
+
+curPt	
+object
+Current robot position
+
+taskPts
+required
+Array of objects
+list of mission points
+
+backPt	
+object
+Return point
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/task/v3/create
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"name": "Delivery Task",
+"robotId": "string",
+"businessId": "string",
+"dispatchType": 0,
+"routeMode": 0,
+"runMode": 0,
+"runNum": 0,
+"taskType": 0,
+"runType": 0,
+"sourceType": 0,
+"ignorePublicSite": true,
+"speed": 0.1,
+"detourRadius": 0.1,
+"curPt": {
+"areaId": "60d9b0a1fccc72d6fd3637dc",
+"x": 0.11,
+"y": 1.22,
+"yaw": 89,
+"type": -1,
+"stopRadius": 1,
+"ext": {},
+"stepActs": []
+},
+"taskPts": [
+{}
+],
+"backPt": {
+"areaId": "60d9b0a1fccc72d6fd3637dc",
+"x": 0.11,
+"y": 1.22,
+"yaw": 89,
+"type": -1,
+"stopRadius": 1,
+"ext": {},
+"stepActs": []
+}
+}
+Response samples
+200400
+Content type
+application/json
+Example
+
+ordinary task success example
+ordinary task success example
+{
+  "status": 200,
+  "message": "ok",
+  "data": {
+    "taskId": "f34a3e46-92e3-4a4f-b959-1966d7f12312" 
+  }
+}
+
+Copy
+""
+new tasks
+New Request Task Example Document https://autoxingtech.github.io/axdoc/en/TaskExample/0_task-example/
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+name
+required
+string
+task name
+
+robotId
+required
+string
+The ID of the robot performing the task
+
+routeMode	
+integer
+Routing mode, default is 1
+1 for sequential routing
+2 for shortest distance routing
+runMode	
+integer
+Travel mode, default is 1
+1 for flexible obstacle avoidance,
+2 for trajectory-based travel with limited obstacle avoidance
+3 for trajectory-based travel without obstacle avoidance
+4 for trajectory-based travel without replenishing the rack docking points
+runNum	
+integer
+Number of executions (default is 1, 0 means infinite loop)
+
+taskType
+required
+integer
+Task type
+0 for disinfection
+1 for return to charging station
+2 for restaurant
+3 for hotel
+4 for delivery (five-in-one)
+5 for factory
+6 for chassis mini-program
+7 for charge scheduling
+runType
+required
+integer
+Run type
+0 for scheduled disinfection
+1 for temporary disinfection
+20 for quick meal delivery
+21 for multi-point meal delivery
+22 for direct delivery
+23 for roaming
+24 for return
+25 for charging station
+26 for summon
+27 for birthday mode
+28 for guiding
+29 for lifting
+30 for lifting cruise
+31 for flexible carry
+32 for roll
+33 for fully charged and unplugged
+sourceType	
+integer
+Task source
+0 for unknown source
+1 for head shell App
+2 for chassis mini program
+3 for pager
+4 for chassis
+5 for dispatch
+6 for secondary development
+7 for Pad App
+ignorePublicSite	
+boolean
+Whether to ignore public sites (default is not to ignore)
+
+speed	
+number <float>
+Robot travel speed in meters per second. Recommended speed is 0.4~1.0
+
+detourRadius	
+number <float>
+Obstacle avoidance radius, unit: meters, default is 1.
+
+curPt	
+object
+Current robot position
+
+taskPts
+required
+Array of objects
+list of mission points
+
+backPt	
+object
+Return point
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/task/v1.1
+Request samples
+Payload
+Content type
+application/json
+Example
+
+Task Application Scenario Examples
+Task Application Scenario Examples
+Task Application Scenario Examples
+
+Go to Point B and Open Cabin Door
+const task1 = {
+  "name": "<taskName>",
+  "robotId": "<robotId>",
+  "runNum": runNum,
+  "taskType": taskType,
+  "runType": runType,
+  "routeMode": 1,
+  "runMode": 1,
+  "ignorePublicSite": false,
+  "speed": -1,
+  "curPt": { // current point info (unnecessary)
+    "x": 2.13,
+    "y": 19.3725,
+    "yaw": 1.67,
+    "areaId": "<areaId>",
+    "type": -1,
+    "stopRadius": 1
+  },
+  "taskPts": [{ // point B info
+    "x": 2.583684539558817,
+    "y": 16.177015024538832,
+    "yaw": 0,
+    "stopRadius": 1,
+    "areaId": "<areaId>",
+    "type": -1,
+    "ext": {
+      "id": "<poiId>",
+      "name": "<poiName>"
+    },
+    "stepActs": [{
+      "type": 6,
+      "data": {
+        "mode": 1,
+        "doorIds": [1, 2, 3, 4]
+      }
+    }]
+  }]
+}
+Close Cabin Door (Wait 10s)
+const task2 = {
+  "name": "<taskName>",
+  "robotId": "<robotId>",
+  "runNum": 1,
+  "taskType": 6,
+  "runType": 21,
+  "routeMode": 1,
+  "runMode": 1,
+  "ignorePublicSite": false,
+  "speed": -1,
+  "curPt": {
+    "x": 2.58,
+    "y": 16.19,
+    "yaw": 0,
+    "areaId": "<areaId>",
+    "type": -1,
+    "stopRadius": 1
+  },
+  "taskPts": [{ // point B info
+    "x": 2.583684539558817,
+    "y": 16.177015024538832,
+    "yaw": 0,
+    "stopRadius": 1,
+    "areaId": "<areaId>",
+    "type": -1,
+    "ext": {
+      "id": "<poiId>",
+      "name": "<poiName>"
+    },
+    "stepActs": [{
+      "type": 28,
+      "data": {
+        "mode": 1,
+        "doorIds": [1, 2, 3, 4]
+      }
+    }, {
+      "type": 18,
+      "data": {
+        "pauseTime": 10
+      }
+    }]
+  }]
+}
+Go to Point C
+const task3 = {
+  "name": "<taskName>",
+  "robotId": "<robotId>",
+  "runNum": 1,
+  "taskType": 6,
+  "runType": 21,
+  "routeMode": 1,
+  "runMode": 1,
+  "ignorePublicSite": false,
+  "speed": -1,
+  "curPt": {
+    "x": 2.58,
+    "y": 16.1875,
+    "yaw": 0,
+    "areaId": "<areaId>",
+    "type": -1,
+    "stopRadius": 1
+  },
+  "taskPts": [{ // point C info
+    "x": 2.3959287090816908,
+    "y": 23.672481677407802,
+    "yaw": 0,
+    "stopRadius": 1,
+    "areaId": "<areaId>",
+    "type": -1,
+    "ext": {
+      "id": "<poiId>",
+      "name": "<poiName>"
+    }
+  }]
+}
+Lift Operation: Go to Point A and Raise Lift (Point A must be a shelf point)
+const task3 = {
+  "name": "<taskName>",
+  "robotId": "<robotId>",
+  "runNum": <runNum>,
+  "taskType": <taskType>,
+  "runType": <runType>,
+  "routeMode": 1,
+  "runMode": 1,
+  "ignorePublicSite": false,
+  "speed": -1,
+  "curPt": {
+  },
+  "taskPts": [{ // point A info
+    "x": 2.3959287090816908,
+    "y": 23.672481677407802,
+    "yaw": 0,
+    "stopRadius": 1,
+    "areaId": "<areaId>",
+    "type": -1,
+    "ext": {
+      "id": "<poiId>",
+      "name": "<poiName>"
+    },
+    stepActs: [{
+      type: 47 // Raise lift
+    }]
+  }]
+}
+Go to Point A and Lower Lift (Point A must be a shelf point)
+const task3 = {
+  "name": "<taskName>",
+  "robotId": "<robotId>",
+  "runNum": <runNum>,
+  "taskType": <taskType>,
+  "runType": <runType>,
+  "routeMode": 1,
+  "runMode": 1,
+  "ignorePublicSite": false,
+  "speed": -1,
+  "curPt": {
+  },
+  "taskPts": [{ // point A info
+    "x": 2.3959287090816908,
+    "y": 23.672481677407802,
+    "yaw": 0,
+    "stopRadius": 1,
+    "areaId": "<areaId>",
+    "type": -1,
+    "ext": {
+      "id": "<poiId>",
+      "name": "<poiName>"
+    },
+    stepActs: [{
+      type: 48 // Lower lift
+    }]
+  }]
+}
+Multi-point Task with Pause for Interaction
+const task4 = {
+  "name": "Multi-point Task",
+  "runMode": <runMode>,
+  "runNum": <runNum>,
+  "taskType": <taskType>,
+  "runType": <runType>,
+  "curPt": {},
+  "taskPts": [
+    {
+      "x": 6.7925255925160855,
+      "y": 1.2596787664165277,
+      "yaw": 268,
+      "areaId": "66879695c207ce62f87991c7",
+      "dockingRadius": "1",
+      "ext": {
+        "name": "Point One",
+        "id": "668796861f783f4b11c89ddc"
+      },
+      "stepActs": [
+        {
+          "type": 40
+        },
+      ]
+    },
+    {
+      "x": 9.005738806990848,
+      "y": 1.2387888340015252,
+      "yaw": 268,
+      "areaId": "66879695c207ce62f87991c7",
+      "dockingRadius": "1",
+      "ext": {
+        "name": "Point Two",
+        "id": "668796861f783f4b11c89dde"
+      },
+      "stepActs": [
+        {
+          "type": 40
+        },
+      ]
+    }
+  ],
+  "backPt": {},
+  "ignorePublicSite": true,
+  "ext": {
+    "checkItems": [
+      "elevator"
+    ]
+  },
+  "soureceType": 1,
+  "detourRadius": 1
+}
+
+Copy
+"Task Application Scenario Examples"
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"taskId": "string"
+}
+}
+get task list
+get the task list
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+pageSize	
+integer
+Default: 0
+the number of pagination,0 indicates no paging
+
+pageNum	
+integer
+Default: 1
+pagination page number
+
+startTime	
+integer <int64>
+start time
+
+endTime	
+integer <int64>
+end time
+
+Responses
+200 the request was successful
+400 Authentication lost败
+
+post
+/task/v1.1/list
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"count": 0,
+"list": []
+}
+}
+get task details
+get task details
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+get
+/task/v1.1/{taskId}
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"taskId": "string",
+"name": "string",
+"robotId": "string",
+"buildingId": "string",
+"businessId": "string",
+"busiType": "string",
+"isExecute": true,
+"isCancel": true,
+"isDel": true,
+"createTime": 0
+}
+}
+update tasks
+update task
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Request Body schema: application/json
+taskPts	
+Array of objects
+list of mission points
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/task/v1.1/{taskId}
+Request samples
+Payload
+Content type
+application/json
+
+Copy
+""
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"taskId": "string"
+}
+}
+delete task
+delete task
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+delete
+/task/v1.1/{taskId}
+Response samples
+200400
+Content type
+application/json
+
+Copy
+{
+"status": 200,
+"message": "ok"
+}
+execute task
+execute the task
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/task/v1.1/{taskId}/execute
+Response samples
+200400
+Content type
+application/json
+
+Copy
+{
+"status": 200,
+"message": "ok"
+}
+cancel task
+cancel task
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/task/v1.1/{taskId}/cancel
+Response samples
+200400
+Content type
+application/json
+
+Copy
+{
+"status": 200,
+"message": "ok"
+}
+V2.0 Get Latest Task Status
+Retrieve the latest task status.
+
+Code Example:
+  Determine task completion status based on actType and isTaskCancel. For other statuses, check the actType field separately. 
+  if (actType === 1001) {  
+    if (isTaskCancel) {  
+      console.log("Received cancellation command, terminating task");  
+    } else {  
+      console.log("Task completed");  
+    }  
+  }
+operationId: taskState
+
+path Parameters
+taskId
+required
+string
+task ID
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+get
+/task/v2.0/{taskId}/state
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"actType": 1001,
+"data": {}
+}
+}
+Building
+get building list
+Get the list of buildings
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/building/v1.1/list
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"list": []
+}
+}
+Business
+get business list
+get business list
+
+header Parameters
+X-Token
+required
+string
+The access token parameter requested by the interface
+
+Responses
+200 the request was successful
+400 Authentication failed
+
+post
+/business/v1.1/list
+Response samples
+200400
+Content type
+application/json
+
+Copy
+Expand allCollapse all
+{
+"status": 200,
+"message": "ok",
+"data": {
+"list": [],
+"groups": []
+}
+}

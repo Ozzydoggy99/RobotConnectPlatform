@@ -1,0 +1,70 @@
+
+
+java Android
+js Introducing SDK
+HTML
+
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      // 引入js-sdk
+      <script src=./autoxing-robot-js-sdk1.0.81.js></script>
+      <script>
+          // appId You can apply to the relevant operational personnel to provide
+          const appId = "—————————————"
+          // appSecret  You can apply to the relevant operational personnel to provide
+          const appSecret = "——————————————————————————————"
+          // robot sn
+          const robotId = "xxxxxxxxxxx817"
+          // Initialization, parameters include application ID, application key, and application mode, set to wide area application mode here
+          * **AppMode** - [AppMode](../Define/Define-AppMode)
+          let axRobot = new AXRobot(appId, appSecret, AppMode.WAN_APP);
+
+          // init
+          function init() {
+              axRobot.init().then((isOk) => { //init
+                  return axRobot.connectRobot({ //connectRobot
+                      robotId: robotId
+                  })
+              }).then((isOK) => {
+                  return axRobot.getPoiList(); //get poiList
+              }).then((res) => {
+                  console.log(res)
+              }).catch((res) => {
+                  console.log(res.errText)
+              })
+          }
+
+          // Android calls JavaScript's Hello function @ param {string} text - string parameter passed from Android
+          function callJSHello(text) {
+              // sdk init
+              init()
+
+              // Get the element with ID 'androidContent', display the value passed in from Android, and add prompt text before it
+              document.getElementById("androidContent").innerHTML = "Android：" + text
+          }
+
+          // js Call the methods provided by Android
+          function clickAndroidHello() {
+              //app from： webView.addJavascriptInterface(MainActivity.this, "app");
+              let android_res = app.actionFromJsHello("你好")
+              // By calling the Android method, the return value is displayed in the element with ID "androidContent"
+              document.getElementById("androidContent").innerHTML = android_res
+          }
+
+          // JavaScript calls Android method to refresh WebView
+          function clickAndroidRefresh() {
+              //Call the Android native app.actionFromJsWebRefresh method to perform a WebView refresh operation
+              app.actionFromJsWebRefresh()
+          }
+      </script>
+  </head>
+  <body>
+  <div style="margin-top:50px;font-weight:bold">111Android WebView 交互Demo</div>
+  <div id="androidContent">
+  </div>
+  <button onclick="clickAndroidHello()">调用Android代码</button>
+  <button onclick="clickAndroidRefresh()">调用Android刷新webView</button>
+  </body>
+
+  </html>
